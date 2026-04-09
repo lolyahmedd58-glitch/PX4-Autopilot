@@ -40,12 +40,13 @@ name: PR Comment Poster
 #      manifest and body itself, NOT copied fork-controlled content into
 #      them. Producer workflows are responsible for that.
 #
-#   6. `actions/checkout@v4` below uses NO ref (so it pulls the base branch,
+#   6. `actions/checkout@v6` below uses NO ref (so it pulls the base branch,
 #      the default-branch commit this workflow file was loaded from) AND uses
-#      sparse-checkout to materialize ONLY Tools/ci/pr-comment-poster.py. The
-#      rest of the repo never touches the workspace. This is safe: the only
-#      file the job executes is a base-repo Python script that was reviewed
-#      through normal code review, never anything from the PR.
+#      sparse-checkout to materialize ONLY Tools/ci/pr-comment-poster.py and
+#      its stdlib-only helper module Tools/ci/_github_helpers.py. The rest of
+#      the repo never touches the workspace. This is safe: the only files the
+#      job executes are base-repo Python scripts that were reviewed through
+#      normal code review, never anything from the PR.
 #
 # ==============================================================================
 # ARTIFACT CONTRACT
@@ -91,22 +92,29 @@ jobs:
   post:
     name: Post PR Comment
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion != 'cancelled'
+    # Only run for pull_request producer runs. Push-to-main and other
+    # non-PR triggers would have no comment to post, and silently no-oping
+    # inside the script made it look like the poster was broken. Gating at
+    # the job level surfaces those as a clean "Skipped" in the UI instead.
+    if: >-
+      github.event.workflow_run.conclusion != 'cancelled'
+      && github.event.workflow_run.event == 'pull_request'
     steps:
       # Checkout runs first so the poster script is available AND so that
-      # actions/checkout@v4's default clean step does not delete the artifact
+      # actions/checkout@v6's default clean step does not delete the artifact
       # zip that the next step writes into the workspace. Sparse-checkout
       # restricts the materialized tree to just the poster script.
       - name: Checkout poster script only
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           sparse-checkout: |
             Tools/ci/pr-comment-poster.py
+            Tools/ci/_github_helpers.py
           sparse-checkout-cone-mode: false
 
       - name: Download pr-comment artifact
         id: download
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
