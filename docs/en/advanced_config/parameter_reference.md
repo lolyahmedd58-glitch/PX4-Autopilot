@@ -33617,11 +33617,11 @@ Selects the key in keystore, used for encrypting the log. When using a symmetric
 
 Maximum log file size.
 
-Maximum size of a single log file in megabytes. When reached, the log file is closed and a new one is started. This value is also added to the cleanup threshold (see SDLOG_ROTATE) to reserve headroom for the next log file. A value of 0 disables both file rotation and the cleanup reservation. Must stay below the FAT32 file size limit of 4 GiB.
+Maximum size of a single log file in mebibytes (1 MiB = 1024 \* 1024 bytes). When reached, the log file is closed and a new one is started. This value is also added to the cleanup threshold (see SDLOG_ROTATE) to reserve headroom for the next log file. A value of 0 disables both file rotation and the cleanup reservation. Must stay below the FAT32 file size limit of 4 GiB.
 
 | Reboot  | minValue | maxValue | increment | default | unit | Read-Only |
 | ------- | -------- | -------- | --------- | ------- | ---- | --------- |
-| &check; | 0        | 4095     |           | 1024    |      | &nbsp;    |
+| &check; | 0        | 4095     |           | 1024    | MiB  | &nbsp;    |
 
 ### SDLOG_MISSION (`INT32`) {#SDLOG_MISSION}
 
