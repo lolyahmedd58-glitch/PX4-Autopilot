@@ -18650,24 +18650,6 @@ Has no effect if COM_ARMABLE is 0.
 | ------- | -------- | -------- | --------- | ------------ | ---- | --------- |
 | &check; |          |          |           | Disabled (0) |      | &nbsp;    |
 
-### COM_ARM_SDCARD (`INT32`) {#COM_ARM_SDCARD}
-
-Enable FMU SD card detection check.
-
-This check detects if the FMU SD card is missing.
-Depending on the value of the parameter, the check can be
-disabled, warn only or deny arming.
-
-**Values:**
-
-- `0`: Disabled
-- `1`: Warning only
-- `2`: Enforce SD card presence
-
-| Reboot | minValue | maxValue | increment | default | unit | Read-Only |
-| ------ | -------- | -------- | --------- | ------- | ---- | --------- |
-| &nbsp; |          |          |           | 1       |      | &nbsp;    |
-
 ### COM_ARM_SWISBTN (`INT32`) {#COM_ARM_SWISBTN}
 
 Arm switch is a momentary button.
