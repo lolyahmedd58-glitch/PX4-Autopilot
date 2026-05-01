@@ -1,0 +1,5 @@
+menuconfig MODULES_HELLO_PX4
+    bool "hello_px4"
+    default n
+    ---help---
+        Enable hello_px4 module
